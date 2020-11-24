@@ -1,0 +1,28 @@
+name: Erlang CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        erlang: [ erlang:21,erlang:22,erlang:23 ]
+
+    container:
+      image: ${{ matrix.erlang }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Compile
+      run: make
+    - name: Dialyzer
+      run: make dialyzer
+    - name: Rel
+      run: make rel
